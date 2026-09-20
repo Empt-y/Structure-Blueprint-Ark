@@ -1,0 +1,7 @@
+{
+  "FullName": "StructureBlueprint",
+  "Description": "Admin area-select, save and paste for structures. Persists across maps and reboots.",
+  "Version": 1.0,
+  "MinApiVersion": 3.4,
+  "Dependencies": []
+}

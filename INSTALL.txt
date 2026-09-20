@@ -1,0 +1,98 @@
+StructureBlueprint v1.0
+Server plugin for ARK: Survival Evolved
+
+Lets an admin select a box, save everything inside it, and paste it back
+somewhere else. Saves are written to disk as normal files rather than into the
+map save, so a library survives wipes, reboots and map changes.
+
+
+BEFORE YOU START
+
+You need ArkServerAPI already installed and working, 3.4 or newer.
+
+This is an Evolved plugin. It will not load on Ascended.
+
+
+INSTALL
+
+1. Stop the server.
+
+2. Copy the StructureBlueprint folder into:
+
+     <server>\ShooterGame\Binaries\Win64\ArkApi\Plugins\
+
+   You should end up with:
+
+     ...\ArkApi\Plugins\StructureBlueprint\StructureBlueprint.dll
+     ...\ArkApi\Plugins\StructureBlueprint\PluginInfo.json
+
+3. Start the server.
+
+There's no config file to edit.
+
+
+COMMANDS
+
+All of these need admin. Type them in chat.
+
+  /sb pos1            set corner one at your feet
+  /sb pos2            set corner two
+  /sb clear           forget the current selection
+  /sb save <name>     save everything inside the box
+  /sb preview <name>  dry run, drops corner markers and checks it fits
+  /sb confirm         build what you just previewed
+  /sb paste <name>    paste at your feet without previewing first
+  /sb list            list saved builds
+  /sb info <name>     piece count and size of a save
+  /sb delete <name>   delete a save
+  /sb undo            remove the last paste
+  /sb cancel          stop a paste that's still running
+
+preview and paste take an optional rotation in degrees after the name, so
+/sb paste mybase 90. Stick to 90, 180 and 270. Anything else places fine but
+snapped pieces end up sitting at an angle to everything around them.
+
+Extra flags for paste:
+
+  --team N    give the base to a specific tribe. Defaults to yours.
+  --rate N    pieces placed per tick, default 25. Lower it if a big paste
+              hitches the server.
+  --invuln    skips finalisation, see the warning below.
+
+
+THE USUAL WORKFLOW
+
+cheat fly, then get to one corner of the build and /sb pos1. Fly to the
+opposite corner and /sb pos2. Get above the roof and below the foundations,
+the box is 3D and anything outside it is left behind. Then /sb save mybase.
+
+To put it back down, /sb preview mybase, check where the markers land, then
+/sb confirm.
+
+If you already know it fits, /sb paste mybase does it in one step.
+
+
+WHERE THE SAVES LIVE
+
+  <server>\ShooterGame\Binaries\Win64\ArkApi\Plugins\StructureBlueprint\saves\
+
+One .sbp file per build. They're gzipped JSON, so gunzip one if you ever want
+to look inside. Copying that saves folder is all it takes to move a library to
+another server.
+
+
+WORTH KNOWING
+
+--invuln skips ARK's own placement step. What you get back is indestructible,
+has no owner, no tribe and never decays, and it can't be demolished the normal
+way. That's useful for arena walls and event builds. Don't use it for anything
+a player is meant to interact with, and don't leave it lying around, because
+cleaning it up later is a pain.
+
+Only geometry is saved: what each piece is, where it sits, how it's rotated,
+and what it's attached to. Inventories, paint, PIN codes and electrical and
+pipe connections are not captured. Pasted bases come back empty and unpainted,
+and you'll need to re-run wiring.
+
+Large pastes are spread over several ticks rather than done in one frame. Let
+one finish before starting another, or stop it with /sb cancel.
