@@ -1,0 +1,7 @@
+build/
+dist/StructureBlueprint/*.dll
+dist/StructureBlueprint/*.pdb
+dist/StructureBlueprint/*.lib
+dist/StructureBlueprint/*.exp
+build_log.txt
+.vendor/
